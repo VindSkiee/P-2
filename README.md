@@ -1,2 +1,2 @@
 Untuk testing run script ini:
-node test/test_[nama file yang ingin di test]
+node test/test_[nama file yang ingin di test].js
