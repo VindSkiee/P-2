@@ -1,0 +1,24 @@
+{
+  "name": "partisipan-01",
+  "version": "1.0.0",
+  "main": "problem_01.js",
+  "directories": {
+    "test": "test"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VindSkiee/P-3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VindSkiee/P-3/issues"
+  },
+  "homepage": "https://github.com/VindSkiee/P-3#readme",
+  "description": ""
+}
