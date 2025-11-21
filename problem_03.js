@@ -1,4 +1,3 @@
-// Kelas Pengguna
 export class Pengguna {
   constructor(id, nama, minat) {
     this.id = id;            // ID unik pengguna
@@ -7,7 +6,6 @@ export class Pengguna {
   }
 }
 
-// Kelas Koneksi
 export class Koneksi {
   constructor(idPengguna1, idPengguna2, waktu) {
     this.idPengguna1 = idPengguna1; // ID pengguna pertama
@@ -16,7 +14,6 @@ export class Koneksi {
   }
 }
 
-// Kelas Jaringan Sosial
 export class JaringanSosial {
   constructor() {
     this.pengguna = [];     // Daftar semua pengguna
