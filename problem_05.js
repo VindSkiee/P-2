@@ -1,4 +1,3 @@
-// Kelas Produk
 export class Produk {
   constructor(id, nama, kategori, stokSekarang, stokMin, stokMax) {
     this.id = id;                // ID unik produk
@@ -10,7 +9,6 @@ export class Produk {
   }
 }
 
-// Kelas Transaksi Stok
 export class TransaksiStok {
   constructor(idProduk, tipe, jumlah, waktu) {
     this.idProduk = idProduk; // ID produk
@@ -20,7 +18,6 @@ export class TransaksiStok {
   }
 }
 
-// Kelas Pengelola Inventaris
 export class PengelolaInventaris {
   constructor() {
     this.produk = [];        // Daftar semua produk
