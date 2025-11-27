@@ -29,7 +29,7 @@ const mk2 = new MataKuliah("IF2", "Kosong", 3);
 sistem.tambahMataKuliah(mk2);
 const stats = sistem.dapatkanStatistikMataKuliah("IF2");
 // Cek apakah mean NaN atau 0 atau null, yang penting jangan crash
-assert(stats.mean === 0 || isNaN(stats.mean) || stats === null, "Statistik data kosong aman (tidak crash)");
+assert(stats === null || stats.mean === 0 || isNaN(stats.mean), "Statistik data kosong aman (tidak crash)");
 
 // 3. Peringkat Mahasiswa Tidak Ada
 const rank = sistem.dapatkanPeringkatMahasiswa(999);
