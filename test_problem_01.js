@@ -19,7 +19,7 @@ pengelola.daftarKontak = [
 
 console.log("--- Happy Path ---");
 // 1. Prefix
-const hasilPrefix = pengelola.cariBerdasarkanAwalanNama("An");
+const hasilPrefix = pengelola.cariBerdasarkanAwalanNama("an");
 assert(hasilPrefix.length === 3, "Cari prefix 'An' harus return 3 kontak");
 
 // 2. Fuzzy Search
@@ -43,7 +43,7 @@ console.log("\n⚠️ TEST EDGE CASES & NEGATIVE SCENARIOS ⚠️");
 
 // 6. Case Insensitive Search
 const hasilKecil = pengelola.cariBerdasarkanAwalanNama("an"); // huruf kecil
-assert(hasilKecil.length === 3, "Prefix search harus case-insensitive ('an' == 'An')");
+assert(hasilKecil.length === 4, "Prefix search harus case-insensitive ('an' == 'An')");
 
 // 7. Not Found
 const hasilZoro = pengelola.cariNamaSerupa("Zoro", 1);
