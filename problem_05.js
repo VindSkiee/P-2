@@ -144,11 +144,14 @@ export class PengelolaInventaris {
 
       for (let j = 0; j < this.produk.length; j++) {
         let p = this.produk[j];
-
-        if (p.id === upd.idProduk) {
+        if (upd.stokBaru < 0) {
+          p.stokSekarang = 0;
+          break;
+        } else if (p.id === upd.idProduk) {
           p.stokSekarang = upd.stokBaru;
           break;
         }
+        
       }
     }
   }

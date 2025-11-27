@@ -45,7 +45,6 @@ export class AnalisisKinerjaMahasiswa {
     }
   }
 
-  // Helper: Hitung GPA mahasiswa
   hitungGPA(mahasiswa) {
     if (mahasiswa.nilai.size === 0) return 0;
 
@@ -96,7 +95,7 @@ export class AnalisisKinerjaMahasiswa {
   }
 
   // initial state: setiap mahasiswa memiliki nilai untuk mata kuliah tertentu
-  // final state: mengembalikan statistik (rata-rata, median, modus, dan standar deviasi) untuk satu mata kuliah
+  // final state: mengembalikan statistik (mean, median, modus, dan standar deviasi) untuk satu mata kuliah
   dapatkanStatistikMataKuliah(kodeMataKuliah) {
     let nilaiList = [];
 
@@ -109,7 +108,7 @@ export class AnalisisKinerjaMahasiswa {
 
     if (nilaiList.length === 0) {
       return {
-        rataRata: 0,
+        mean: 0,
         median: 0,
         modus: 0,
         standarDeviasi: 0
@@ -152,7 +151,7 @@ export class AnalisisKinerjaMahasiswa {
     let standarDeviasi = Math.sqrt(selisihTotal / nilaiList.length);
 
     return {
-      rataRata: rata,
+      mean: rata,
       median: median,
       modus: modus,
       standarDeviasi: standarDeviasi

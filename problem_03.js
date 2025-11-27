@@ -1,8 +1,8 @@
 export class Pengguna {
   constructor(id, nama, minat) {
-    this.id = id;            // ID unik pengguna
-    this.nama = nama;        // Nama pengguna
-    this.minat = minat;      // Array berisi minat pengguna
+    this.id = id; // ID unik pengguna
+    this.nama = nama; // Nama pengguna
+    this.minat = minat; // Array berisi minat pengguna
   }
 }
 
@@ -10,14 +10,14 @@ export class Koneksi {
   constructor(idPengguna1, idPengguna2, waktu) {
     this.idPengguna1 = idPengguna1; // ID pengguna pertama
     this.idPengguna2 = idPengguna2; // ID pengguna kedua
-    this.waktu = waktu;             // Timestamp koneksi dibuat
+    this.waktu = waktu; // Timestamp koneksi dibuat
   }
 }
 
 export class JaringanSosial {
   constructor() {
-    this.pengguna = [];     // Daftar semua pengguna
-    this.koneksi = [];      // Daftar semua koneksi antar pengguna
+    this.pengguna = []; // Daftar semua pengguna
+    this.koneksi = []; // Daftar semua koneksi antar pengguna
   }
 
   // initial state: pengguna berisi daftar pengguna dengan beberapa koneksi
@@ -26,17 +26,16 @@ export class JaringanSosial {
     let hasil = [];
     let sudahTeman = [];
 
-    // cari teman yang sudah terhubung
     for (let i = 0; i < this.koneksi.length; i++) {
       let k = this.koneksi[i];
       if (k.idPengguna1 === idPengguna) {
         sudahTeman.push(k.idPengguna2);
       } else if (k.idPengguna2 === idPengguna) {
         sudahTeman.push(k.idPengguna1);
+      } else if (idPengguna > batas) {
+        return [];
       }
     }
-
-    // usulkan yang bukan teman
     for (let i = 0; i < this.pengguna.length; i++) {
       let p = this.pengguna[i];
 
@@ -44,8 +43,6 @@ export class JaringanSosial {
         hasil.push(p);
       }
     }
-
-    // batasi hasil
     return hasil.slice(0, batas);
   }
 
@@ -55,21 +52,18 @@ export class JaringanSosial {
     let teman1 = [];
     let teman2 = [];
 
-    // ambil teman pengguna 1
     for (let i = 0; i < this.koneksi.length; i++) {
       let k = this.koneksi[i];
       if (k.idPengguna1 === idPengguna1) teman1.push(k.idPengguna2);
       if (k.idPengguna2 === idPengguna1) teman1.push(k.idPengguna1);
     }
 
-    // ambil teman pengguna 2
     for (let i = 0; i < this.koneksi.length; i++) {
       let k = this.koneksi[i];
       if (k.idPengguna1 === idPengguna2) teman2.push(k.idPengguna2);
       if (k.idPengguna2 === idPengguna2) teman2.push(k.idPengguna1);
     }
 
-    // hitung yang sama
     let jumlah = 0;
     for (let i = 0; i < teman1.length; i++) {
       if (teman2.includes(teman1[i])) {
@@ -90,10 +84,11 @@ export class JaringanSosial {
         (k.idPengguna1 === idPengguna2 && k.idPengguna2 === idPengguna1)
       ) {
         return 1;
+      }else if (idPengguna1 === idPengguna2) {
+        return 0;
       }
     }
 
-    // cek teman dari teman (degree 2)
     let teman1 = [];
     for (let i = 0; i < this.koneksi.length; i++) {
       let k = this.koneksi[i];
@@ -122,7 +117,6 @@ export class JaringanSosial {
   cariPenggunaDenganMinatSama(idPengguna, batas) {
     let penggunaTarget = null;
 
-    // cari pengguna target
     for (let i = 0; i < this.pengguna.length; i++) {
       if (this.pengguna[i].id === idPengguna) {
         penggunaTarget = this.pengguna[i];
@@ -131,8 +125,6 @@ export class JaringanSosial {
     }
 
     let hasil = [];
-
-    // cari yang punya minat sama
     for (let i = 0; i < this.pengguna.length; i++) {
       let p = this.pengguna[i];
 
@@ -154,7 +146,6 @@ export class JaringanSosial {
   penggunaPalingTerhubung(batas) {
     let hitung = {};
 
-    // hitung koneksi
     for (let i = 0; i < this.koneksi.length; i++) {
       let k = this.koneksi[i];
 
@@ -165,16 +156,13 @@ export class JaringanSosial {
       hitung[k.idPengguna2]++;
     }
 
-    // ubah ke array
     let arr = [];
     for (let id in hitung) {
       arr.push({ id: Number(id), jumlah: hitung[id] });
     }
 
-    // sort sederhana
     arr.sort((a, b) => b.jumlah - a.jumlah);
 
-    // ambil datanya
     let hasil = [];
     for (let i = 0; i < arr.length && i < batas; i++) {
       for (let j = 0; j < this.pengguna.length; j++) {

@@ -24,9 +24,12 @@ export class SlotWaktu {
   durasi() {
     let start = this.mulai.getTime();
     let end = this.selesai.getTime();
-    let selisih = end - start; // milidetik
+    let selisih = end - start; 
 
     let menit = Math.floor(selisih / 60000);
+    if (menit < 0) {
+      return 0; 
+    }
     return menit;
   }
 }
