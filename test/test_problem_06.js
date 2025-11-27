@@ -1,65 +1,39 @@
 import { Produk, KatalogProduk } from './../problem_06.js';
 
-console.log('=== TEST: problem_06 ===\n');
+function assert(condition, message) {
+    if (condition) console.log(`✅ [PASS] ${message}`);
+    else console.error(`❌ [FAIL] ${message}`);
+}
 
-// 1️⃣ Setup awal
+console.log('=== TEST: problem_06 (Katalog) ===\n');
+
 const katalog = new KatalogProduk();
+// Harga: 500 (Murah), 10000 (Mahal)
+katalog.tambahProduk(new Produk(1, "A", "Elek", 500, ["tag"], 4.5));
+katalog.tambahProduk(new Produk(2, "B", "Elek", 10000, ["tag"], 4.0));
 
-const p1 = new Produk(1, "Keyboard Mechanical", "Elektronik", 550000, ["gaming", "peripheral", "rgb"], 4.7);
-const p2 = new Produk(2, "Mouse Wireless", "Elektronik", 250000, ["wireless", "peripheral"], 4.5);
-const p3 = new Produk(3, "Headset Gaming", "Elektronik", 750000, ["gaming", "audio"], 4.8);
-const p4 = new Produk(4, "Laptop ASUS", "Komputer", 10500000, ["notebook", "intel", "ssd"], 4.9);
-const p5 = new Produk(5, "Mousepad XL", "Aksesori", 150000, ["gaming", "peripheral"], 4.4);
+console.log("--- Happy Path ---");
+assert(katalog.daftarProduk.length === 2, "Tambah produk sukses");
+assert(katalog.cariBerdasarkanNama("A").length === 1, "Cari nama sukses");
 
-console.log("✅ Test tambahProduk");
-katalog.tambahProduk(p1);
-katalog.tambahProduk(p2);
-katalog.tambahProduk(p3);
-katalog.tambahProduk(p4);
-katalog.tambahProduk(p5);
-console.log("Jumlah produk:", katalog.daftarProduk.length === 5);
+console.log("\n⚠️ TEST EDGE CASES & NEGATIVE SCENARIOS ⚠️");
 
-// 2️⃣ Test hapusProduk
-console.log("\n✅ Test hapusProduk");
-katalog.hapusProduk(5);
-console.log("Produk Mousepad XL terhapus:", katalog.daftarProduk.length === 4);
+// 1. Undefined Filter (Partial Object)
+// User cuma kirim kategori, harga dll undefined. Kode Naif suka crash disini karena akses property of undefined.
+try {
+    const filter = katalog.filterProduk({ kategori: "Elek" }); 
+    assert(filter.length === 2, "Filter partial object harus jalan");
+} catch (e) {
+    assert(false, "Sistem crash saat filter tidak lengkap!");
+}
 
-// 3️⃣ Test cariBerdasarkanNama
-console.log("\n✅ Test cariBerdasarkanNama");
-const hasilCari = katalog.cariBerdasarkanNama("mouse");
-console.log("Hasil pencarian mengandung 'Mouse':", Array.isArray(hasilCari));
+// 2. Numeric Sorting Bug (10000 vs 500)
+// Kalau pakai sorting string default, "10000" < "500". Harus numeric sort.
+const sorted = katalog.dapatkanProdukTerurut("harga", "naik");
+assert(sorted[0].id === 1 && sorted[1].id === 2, "Sorting harga harus numerik (500 < 10000)");
 
-// 4️⃣ Test filterProduk
-console.log("\n✅ Test filterProduk");
-const hasilFilter = katalog.filterProduk({
-  kategori: "Elektronik",
-  hargaMinimum: 200000,
-  hargaMaksimum: 800000,
-  ratingMinimum: 4.5,
-  tag: "gaming"
-});
-console.log("Hasil filter valid:", Array.isArray(hasilFilter));
+// 3. Auto complete limit
+const auto = katalog.autoLengkap("Z", 5);
+assert(Array.isArray(auto) && auto.length === 0, "Autocomplete tidak ketemu return array kosong");
 
-// 5️⃣ Test dapatkanProdukTerurut
-console.log("\n✅ Test dapatkanProdukTerurut");
-const urutHargaNaik = katalog.dapatkanProdukTerurut("harga", "naik");
-const urutRatingTurun = katalog.dapatkanProdukTerurut("rating", "turun");
-console.log("Urut harga naik:", Array.isArray(urutHargaNaik));
-console.log("Urut rating turun:", Array.isArray(urutRatingTurun));
-
-// 6️⃣ Test dapatkanProdukDalamRentangHarga
-console.log("\n✅ Test dapatkanProdukDalamRentangHarga");
-const rentang = katalog.dapatkanProdukDalamRentangHarga(200000, 800000);
-console.log("Produk dalam rentang harga ditemukan:", Array.isArray(rentang));
-
-// 7️⃣ Test dapatkanProdukSerupa
-console.log("\n✅ Test dapatkanProdukSerupa");
-const serupa = katalog.dapatkanProdukSerupa(1, 2);
-console.log("Produk serupa dengan Keyboard ditemukan:", Array.isArray(serupa));
-
-// 8️⃣ Test autoLengkap
-console.log("\n✅ Test autoLengkap");
-const auto = katalog.autoLengkap("Lap", 3);
-console.log("Hasil auto-lengkap berupa array:", Array.isArray(auto));
-
-console.log("\n🎯 Semua pengujian template KatalogProduk dijalankan (silakan lengkapi implementasi fungsi di class KatalogProduk).\n");
+console.log("\n=== SELESAI TESTING ===");

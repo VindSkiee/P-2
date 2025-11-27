@@ -1,47 +1,43 @@
 import { Pengguna, Koneksi, JaringanSosial } from './../problem_03.js';
 
-console.log('=== TEST: problem_03 ===\n');
+function assert(condition, message) {
+    if (condition) console.log(`✅ [PASS] ${message}`);
+    else console.error(`❌ [FAIL] ${message}`);
+}
 
-// Inisialisasi data awal
+console.log('=== TEST: problem_03 (Jaringan Sosial) ===\n');
+
 const js = new JaringanSosial();
-
-// Tambah pengguna
+// 1 -> 2 -> 3
+// 4 (Terisolasi)
 js.pengguna.push(
-  new Pengguna(1, "Arvind", ["coding", "musik", "fitness"]),
-  new Pengguna(2, "Bima", ["coding", "game"]),
-  new Pengguna(3, "Citra", ["musik", "design"]),
-  new Pengguna(4, "Dewi", ["travel", "fitness"]),
-  new Pengguna(5, "Eka", ["coding", "fitness", "game"]),
-  new Pengguna(6, "Farhan", ["design", "coding"])
+  new Pengguna(1, "A", ["coding"]),
+  new Pengguna(2, "B", ["coding"]),
+  new Pengguna(3, "C", ["music"]),
+  new Pengguna(4, "D", ["travel"]) 
 );
+js.koneksi.push(new Koneksi(1, 2, Date.now()), new Koneksi(2, 3, Date.now()));
 
-// Tambah koneksi (bidirectional)
-js.koneksi.push(
-  new Koneksi(1, 2, Date.now()),
-  new Koneksi(2, 3, Date.now()),
-  new Koneksi(3, 4, Date.now()),
-  new Koneksi(2, 5, Date.now()),
-  new Koneksi(5, 6, Date.now())
-);
+console.log("--- Happy Path ---");
+assert(js.derajatKoneksi(1, 2) === 1, "Derajat koneksi langsung adalah 1");
+assert(js.derajatKoneksi(1, 3) === 2, "Derajat koneksi via teman adalah 2");
 
-// 1️⃣ Test sarankanTeman
-const saran = js.sarankanTeman(1, 3);
-console.log("✅ Saran teman untuk Arvind:", saran.map(p => p.nama));
+console.log("\n⚠️ TEST EDGE CASES & NEGATIVE SCENARIOS ⚠️");
 
-// 2️⃣ Test hitungTemanSama
-const temanSama = js.hitungTemanSama(2, 3);
-console.log("✅ Jumlah teman sama antara Bima dan Citra:", temanSama);
+// 1. No Connection (Graph Terputus)
+const path = js.derajatKoneksi(1, 4);
+assert(path === -1 || path === Infinity, "Derajat koneksi terputus harus -1 atau Infinity");
 
-// 3️⃣ Test derajatKoneksi
-const derajat = js.derajatKoneksi(1, 6);
-console.log("✅ Derajat koneksi Arvind → Farhan:", derajat);
+// 2. Self Connection
+const selfPath = js.derajatKoneksi(1, 1);
+assert(selfPath === 0, "Derajat ke diri sendiri harus 0");
 
-// 4️⃣ Test cariPenggunaDenganMinatSama
-const minatSama = js.cariPenggunaDenganMinatSama(1, 3);
-console.log("✅ Pengguna dengan minat mirip Arvind:", minatSama.map(p => p.nama));
+// 3. Invalid ID
+try {
+    const invalidUser = js.sarankanTeman(999, 1);
+    assert(Array.isArray(invalidUser) && invalidUser.length === 0, "ID tidak ditemukan harus return array kosong/handle error");
+} catch (e) {
+    assert(true, "Error handling untuk ID 999 berjalan");
+}
 
-// 5️⃣ Test penggunaPalingTerhubung
-const topTerhubung = js.penggunaPalingTerhubung(2);
-console.log("✅ Pengguna paling terhubung:", topTerhubung.map(p => p.nama));
-
-console.log("\n🎯 Semua pengujian selesai dijalankan.\n");
+console.log("\n=== SELESAI TESTING ===");
