@@ -1,2 +1,4 @@
 sonar-project.properties
 .scannerwork/
+coverage/
+node_modules/

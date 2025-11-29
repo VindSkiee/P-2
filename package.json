@@ -1,5 +1,5 @@
 {
-  "name": "H-2",
+  "name": "p-2",
   "version": "1.0.0",
   "main": "problem_01.js",
   "directories": {
@@ -7,18 +7,31 @@
   },
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "problem_*.js"
+    ],
+    "coverageReporters": [
+      "lcov",
+      "text"
+    ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/VindSkiee/P-3.git"
+    "url": "git+https://github.com/VindSkiee/P-2.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/VindSkiee/P-3/issues"
+    "url": "https://github.com/VindSkiee/P-2/issues"
   },
-  "homepage": "https://github.com/VindSkiee/P-3#readme",
-  "description": ""
+  "homepage": "https://github.com/VindSkiee/P-2#readme",
+  "description": "",
+  "devDependencies": {
+    "jest": "^30.2.0"
+  }
 }
