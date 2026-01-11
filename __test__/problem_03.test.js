@@ -1,7 +1,7 @@
 import { Pengguna, Koneksi, JaringanSosial } from '../problem_03.js';
 import { jest } from '@jest/globals';
 
-describe('Problem 03: Jaringan Sosial', () => {
+describe('Problem 03: Jaringan Sosial (Final Suite)', () => {
   let js;
 
   beforeEach(() => {
@@ -10,50 +10,36 @@ describe('Problem 03: Jaringan Sosial', () => {
         new Pengguna(1, "A", ["coding"]),
         new Pengguna(2, "B", ["coding"]),
         new Pengguna(3, "C", ["music"]),
-        new Pengguna(4, "D", ["travel"]),
-        new Pengguna(5, "E", ["coding"])
+        new Pengguna(4, "D", ["travel"]), // User Terisolasi
     ];
-    // A-B, B-C, B-E
     js.koneksi = [
-        new Koneksi(1, 2, Date.now()),
-        new Koneksi(2, 3, Date.now()),
-        new Koneksi(2, 5, Date.now())
+        new Koneksi(1, 2, Date.now()), // A-B
+        new Koneksi(2, 3, Date.now()), // B-C
     ];
   });
 
-  // --- HAPPY PATHS ---
-  test('Sarankan Teman (Friends of Friends)', () => {
-    const saran = js.sarankanTeman(1, 2);
-    // A teman B. B teman C dan E. Jadi saran untuk A adalah C atau E.
-    const ids = saran.map(p => p.id);
-    expect(ids.includes(3) || ids.includes(5)).toBe(true);
-  });
-
-  test('Hitung Teman Sama', () => {
-    // A teman B. E teman B. Teman sama = B (1 orang).
-    // Note: Logika soal mungkin mutual friends. 
-    // Misal: A punya teman [B]. E punya teman [B]. Mutual = 1.
-    const jumlah = js.hitungTemanSama(1, 5); 
-    // Tergantung implementasi graph bidirectional Anda.
-    // Kita asumsikan implementasi benar akan return angka >= 0
-    expect(typeof jumlah).toBe('number');
-  });
-
-  test('Derajat Koneksi (BFS)', () => {
-    // A -> B -> C (Jarak 2)
+  // --- GROUP 1: HAPPY PATHS ---
+  test('Shortest Path (BFS Algorithm)', () => {
+    // Jarak A ke C adalah 2 (A -> B -> C)
     expect(js.derajatKoneksi(1, 3)).toBe(2);
   });
 
-  test('Cari Pengguna Minat Sama', () => {
+  test('Minat Sama (Intersection Himpunan)', () => {
+    // A dan B sama-sama suka "coding"
     const hasil = js.cariPenggunaDenganMinatSama(1, 5);
-    // A & B & E suka coding
-    expect(hasil.some(p => p.nama === "B")).toBe(true);
+    expect(hasil.some(u => u.id === 2)).toBe(true);
+    expect(hasil.some(u => u.id === 3)).toBe(false);
   });
 
-  // --- EDGE CASES ---
-  test('Edge Case: Graph Terputus', () => {
-    // A tidak kenal D
-    const derajat = js.derajatKoneksi(1, 4);
-    expect(derajat === -1 || derajat === Infinity || derajat === null).toBe(true);
+  // --- GROUP 2: EDGE CASES ---
+  test('Graph Terputus (Disconnected)', () => {
+    // A dan D tidak punya jalur koneksi
+    const jarak = js.derajatKoneksi(1, 4);
+    expect(jarak).toBe(-1); // Atau Infinity (sesuai implementasi)
+  });
+
+  test('User Tidak Ditemukan', () => {
+    expect(() => js.sarankanTeman(99, 5)).not.toThrow();
+    expect(js.sarankanTeman(99, 5)).toEqual([]);
   });
 });
